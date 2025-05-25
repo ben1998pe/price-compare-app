@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Comparador de Precios</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 <span class="title">Comparador de Precios</span></h1>
+
+    <form action="/" method="get" class="search-form">
+      <input type="text" name="query" placeholder="Ej: Laptop Lenovo V15" value="{{ query or '' }}" required />
+      <button type="submit">Buscar</button>
+    </form>
+
+    {% if query %}
+      <h2 class="results-title">Resultados para: "<span class="highlight">{{ query }}</span>" ({{ resultados|length }} productos)</h2>
+      <div class="loader" id="loader"></div>
+      <div class="grid" id="resultados" style="display:none">
+        {% for r in resultados %}
+        <div class="card">
+          <div class="tag">{{ r.origen }}</div>
+          <h3 class="product-title">{{ r.titulo }}</h3>
+          <p class="price">{{ r.precio }}</p>
+          <a href="{{ r.link }}" target="_blank" class="btn">Ver producto</a>
+        </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const loader = document.getElementById("loader");
+      const results = document.getElementById("resultados");
+
+      if (loader && results) {
+        setTimeout(() => {
+          loader.style.display = "none";
+          results.style.display = "grid";
+        }, 1000);
+      }
+    });
+  </script>
+</body>
+</html>
